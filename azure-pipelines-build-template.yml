@@ -34,6 +34,22 @@ jobs:
           targets: bundle
           arguments: '--ship'
 
+      - script: npm test
+        displayName: 'npm test'
+
+      - task: PublishTestResults@2
+        displayName: Publish test results
+        inputs:
+          testResultsFormat: JUnit
+          testResultsFiles: '**/junit.xml'
+          #failTaskOnFailedTests: true #if we want to fail the build on failed unit tests
+
+      - task: PublishCodeCoverageResults@1
+        displayName: 'Publish code coverage results'
+        inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
+
       - task: Gulp@0
         displayName: 'Package Solution'
         inputs:
